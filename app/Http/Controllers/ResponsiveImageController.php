@@ -55,7 +55,8 @@ class ResponsiveImageController extends Controller
         return view('welcome', ['error' => 'The php gd library is NOT installed in your php, you can try phpinfo(); to see more.  You may have to install a new version of php or recompile php with gd enabled.']);
     }
 
-    // lets read all the image sizes into scales
+    // Although we could use dynamic variable names here,
+    // I don't think it would be cool, so let's not do that
     if($request->size1)
       $scales[] = $request->size1;
     if($request->size2)
@@ -88,7 +89,7 @@ class ResponsiveImageController extends Controller
     {
       request()->validate([
         'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
-        'size1' => 'nullable|numeric',
+        'size1' => 'required|numeric',
         'size2' => 'nullable|numeric',
         'size3' => 'nullable|numeric',
         'size4' => 'nullable|numeric',
@@ -116,6 +117,7 @@ class ResponsiveImageController extends Controller
         mkdir($directory, 0775, true);
       }
 
+      // this does get the mime type so it will never be jpg
       $mime=$request->photo->extension();
 
       if($DEBUG)
@@ -125,13 +127,13 @@ class ResponsiveImageController extends Controller
       {
         case "jpg":
           if($DEBUG)
-            echo "Cliff here in jpg";
+            echo "This code should never run";
           $start_name = str_replace('.jpg', '', basename($image));
           $im_php = imagecreatefromjpeg($request->photo);
           break;
         case "jpeg":
           if($DEBUG)
-            echo "Cliff here in jpeg";
+            echo "Will always be jpeg, regardless of extension";
           $im_php = imagecreatefromjpeg($request->photo);
           $start_name = str_replace('.jpeg', '', basename($image));
           $start_name = str_replace('.jpg' , '', basename($image));
@@ -158,7 +160,7 @@ class ResponsiveImageController extends Controller
         $new_name = $start_name.'_X'.$scale.'_Y'.$new_height.'.jpg';
 
         if($DEBUG)
-        echo "\r\n".$new_name."\r\n";
+          echo "\r\n".$new_name."\r\n";
 
         $file_path = $directory . '/' . $new_name;
 

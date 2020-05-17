@@ -1,14 +1,38 @@
 <?php
-/**************************************************************
- * This code works, it scales an image to 640px wide
- * We need an interface where a user can choose several
- * different sizes.
- * The interface needs to have an initial file
- * This file should be stored in public/images
- * The result should be all of the new sized images in the
- * resized folder
- *************************************************************/
-
+/***********************************************************************
+ * Author: Clifford Christianson
+ * Creation Date: May 14, 2020
+ * welcome.blade.php
+ * This application resizes images to
+ * different horizontal widths automatically
+ * We take up to 12 sizes and an image file as input.
+ * It will then save the image file in
+ * each of the horizontal width sizes
+ * Don't put this on an internet server
+ * or someone will upload a RAT!
+ * Always store uploaded user files off server somewhere else!
+ * Validate the actual images, not the extension
+ * Use on your local development environment only!
+ * Make sure GD library is installed
+ * and enabled with phpinfo();
+ *
+ *
+ *               ____...---...___
+ * ___.....---"""        .       ""--..____
+ *     .                  .            .
+ * .            ^_.--._^      /|
+ *        .    .'()..()`.    / /
+ *            ( `-.__.-' )  ( (    .
+ *   .         \        /    \ \
+ *       .      \      /      ) )        .
+ *            .' -.__.- `.-.-'_.'
+ * .        .'  /-____-\  `.-'       .
+ *          \  /-.____.-\  /-.
+ *           \ \`-.__.-'/ /\|\|           .
+ *          .'  `.    .'  `.
+ *          |/\/\|    |/\/\|
+ * jro
+ **********************************************************************/
 
 ?>
 <!DOCTYPE html>
@@ -35,7 +59,7 @@
   action="{{url('createImages')}}"
   enctype="multipart/form-data">
   @csrf <!-- {{ csrf_field() }} -->
-  <div class="page-wrapper bg-gra-03 p-t-45 p-b-50">
+  <div class="page-wrapper bg-gra-04 p-t-45 p-b-50">
     <div class="wrapper wrapper--w790">
       <div class="card card-5"
         id="step1"
