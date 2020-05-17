@@ -2,8 +2,10 @@
 
 ![Screen Shot 1](../assets/Screen-Shot-1.png?raw=true)
 Up to 12 different image sizes
+
 ![Screen Shot 2](../assets/Screen-Shot-2.png?raw=true)
 All of the fields on step 2 are optional, they will be removed from the code if you leave them blank.
+
 ![Screen Shot 3](../assets/Screen-Shot-3.png?raw=true)
 
 Tired of scaling and saving images in GIMP?  How about copy/pasting filenames for all of your responsive images?  
@@ -26,6 +28,6 @@ app/Http/Controllers/ResponsiveImageController.php
 The script can be found at
 public/js/form.js
 
-### WARNING:  DO NOT PUT THIS CODE ON A WEBSITE OR A HACKER WILL PAWN YOU WITH A RAT!  THIS APPLICATION IS FOR USE ON YOUR LOCAL DEV SERVER ONLY!  DON'T EVER STORE USER UPLOADED FILES ON YOUR SERVER EVER, DONT DO IT!! USE THE CLOUD OR A SERVER FROM SOMEONE YOU DON'T LIKE. ALWAYS CHANGE UPLOADED FILENAMES TO SOMETHING COMPLETELY RANDOM AND NEVER TRUST FILE EXTENSIONS.  SEARCH FOR OWASP TO LEARN MORE.
+##### WARNING:  DO NOT PUT THIS CODE ON A WEBSITE OR A HACKER WILL PAWN YOU WITH A RAT!  THIS APPLICATION IS FOR USE ON YOUR LOCAL DEV SERVER ONLY!  DON'T EVER STORE USER UPLOADED FILES ON YOUR SERVER EVER, DONT DO IT!! USE THE CLOUD OR A SERVER FROM SOMEONE YOU DON'T LIKE. ALWAYS CHANGE UPLOADED FILENAMES TO SOMETHING COMPLETELY RANDOM AND NEVER TRUST FILE EXTENSIONS.  SEARCH FOR OWASP TO LEARN MORE.
 
 Troubleshooting:  This application uses the gd library for image manipulation so make sure it is enabled with phpinfo()
