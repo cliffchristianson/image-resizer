@@ -1,5 +1,7 @@
 #Welcome to the image-resizer!
 
+![Screen Shot 1](../assets/Screen-Shot-1.png?raw=true)
+
 Tired of scaling and saving images in GIMP?  How about copy/pasting filenames for all of your responsive images?  
 
 Yuck!  We don't want to do that anymore!
