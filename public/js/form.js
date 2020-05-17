@@ -40,12 +40,9 @@ let form = document.querySelector(`#${formId}`); // select form
 let formElements = form.elements; // get the elements in the form
 
 /**
- * This function gets the values in the form
- * and returns them as an object with the
- * [formIdentifier] as the object key
- * @returns {Object}
- */
-
+ *  this is the form submit from step 1
+ *  save all guys to local storage and hit the controller
+ */ 
 const submitForm = () =>
 {
   data = getFormData();
@@ -53,38 +50,46 @@ const submitForm = () =>
   document.getElementById("resize-image-form").submit();
 };
 
+/**
+ * this is the submit button from step 2
+ * save all guys to local storage
+ * hide step 1 and step 2, show step 3
+ * build the copy/paste code for step 3
+ */
 const buildFigure = () =>
 {
   data = getFormData();
   localStorage.setItem(formIdentifier, JSON.stringify(data[formIdentifier]));
 
-  // we don't submit, we need to hide step 2 and show step 3
+  // we don't submit, we need to hide steps 1 & 2 and show step 3
   document.getElementById("step1").style.display = "none";
   document.getElementById("step2").style.display = "none";
   document.getElementById("step3").style.display = "block";
 
   // lets build the code block
+  // first lets get the offset
   if(document.getElementById('offset') != null)
     var offset = parseInt(document.getElementById('offset').value);
   else
     var offset = 0;
   
-  // lets set the link
+  // lets set the link for all of the images
   createAnchorElement('image-link', 'image-link-span');
   
-  loop = 0;
+  imageCnt = 0;
 
-  // lets set the responsive images
+  // lets build the responsive image links
   for(cnt=1; cnt<13; cnt++)
   {
+    // dynamic variables are cool to use in javascript
     if(document.getElementById('image'+cnt) != null)
     {
-      ++loop;
+      ++imageCnt;
       buildElement(cnt, offset)
     }
   }
   // lets set the default img tag
-  lastImage = document.getElementById('image' + loop).innerHTML;
+  lastImage = document.getElementById('image' + imageCnt).innerHTML;
   document.getElementById('image-src').innerHTML = "&lt;image src='" + lastImage + "' /&gt;";
 
   // lets set the end link
@@ -110,6 +115,7 @@ const buildFigure = () =>
   
 };
 
+// create an anchor element with the input link
 const createAnchorElement = (elem, elemSpan) =>
 {
   if(document.getElementById(elem).value)
@@ -126,6 +132,7 @@ const createAnchorElement = (elem, elemSpan) =>
   }
 }
 
+// just add a </a> to end the anchor tag
 const createEndAnchorElement = (elem, elemSpan) =>
 {
   if(document.getElementById(elem).value)
@@ -142,12 +149,14 @@ const createEndAnchorElement = (elem, elemSpan) =>
   }
 }
 
+// create a normal element
 const createElement = (elem, elemSpan) =>
 {
   if(document.getElementById(elem).value)
   {
     // set the element
     var elemValue = document.getElementById(elem).value;
+    // if it is a cite, encapsulate it with the cite tag
     if(elem === 'cite')
       document.getElementById(elemSpan).innerHTML = "&lt;cite&gt;" + elemValue + "&lt;/cite&gt;";
     else
@@ -161,6 +170,7 @@ const createElement = (elem, elemSpan) =>
   }
 }
 
+// build the responsive images
 const buildElement = (index, offset) =>
 {
   const size = parseInt(document.getElementById('size' + index).value);
@@ -172,6 +182,12 @@ const buildElement = (index, offset) =>
   }
 }
 
+/**
+ * This function gets the values in the form
+ * and returns them as an object with the
+ * [formIdentifier] as the object key
+ * @returns {Object}
+ */
 const getFormData = () =>
 {
   let data = { [formIdentifier]: {} };
@@ -199,6 +215,8 @@ const populateForm = () =>
     {
       if(savedData)
       {
+        // don't save the csrf token or we will get a 419 error
+        // don't save the filename or it will complain
         if(element.name in savedData &&
             element.name != "_token" &&
             element.name != "photo")
