@@ -2,12 +2,14 @@
 /***********************************************************************
  * Author: Clifford Christianson
  * Creation Date: May 14, 2020
+ * ResponsiveImageController.php
  * This application resizes images to
  * different horizontal widths automatically
- * We take up to 10 sizes and an image file as input.
+ * We take up to 12 sizes and an image file as input.
  * It will then save the image file in
  * each of the horizontal width sizes
- * Don't put this on an internet server or someone will upload a RAT!
+ * Don't put this on an internet server
+ * or someone will upload a RAT!
  * Always store uploaded user files off server somewhere else!
  * Validate the actual images, not the extension
  * Use on your local development environment only!
@@ -34,25 +36,23 @@
 
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Storage;
 
-/**
- * What would be cool to have
- * How about the ouput is a generated figure with all the guys?
- */
-
-class AdminController extends Controller
+class ResponsiveImageController extends Controller
 {
-  //
   public function resizeImages(Request $request)
   {
-    dd("cliff here");
+    $directory = 'images/resized'; // This path is in my public, NOT my storage/app
+    $imageArray = []; // return array of images we create
+    $DEBUG = 0; // Set to 1 for testing
+
     if (extension_loaded('gd') && function_exists('gd_info')) {
-      // say something here to make sure
-      echo "Yay! GD library rocks!";
+      if($DEBUG)
+        echo "PHP GD Library is install in php";
     }
     else {
-        echo "PHP GD library is NOT installed in php";
-        return ("GD Library is not installed in php");
+        return view('welcome', ['error' => 'The php gd library is NOT installed in your php, you can try phpinfo(); to see more.  You may have to install a new version of php or recompile php with gd enabled.']);
     }
 
     // lets read all the image sizes into scales
@@ -76,84 +76,119 @@ class AdminController extends Controller
       $scales[] = $request->size9;
     if($request->size10)
       $scales[] = $request->size10;
+    if($request->size11)
+      $scales[] = $request->size11;
+    if($request->size12)
+      $scales[] = $request->size12;
 
-    $input = $request->photo;
-
-    $directory = 'public/images';
-    // $scales = [980,680,480,320];
+    if($DEBUG)
+      var_dump($scales);
 
     if($request->hasFile('photo'))
     {
       request()->validate([
-      'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
-      'size1' => 'sometimes|numeric',
-      'size2' => 'sometimes|numeric',
-      'size3' => 'sometimes|numeric',
-      'size4' => 'sometimes|numeric',
-      'size5' => 'sometimes|numeric',
-      'size6' => 'sometimes|numeric',
-      'size7' => 'sometimes|numeric',
-      'size8' => 'sometimes|numeric',
-      'size9' => 'sometimes|numeric',
-      'size10' => 'sometimes|numeric',
+        'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
+        'size1' => 'nullable|numeric',
+        'size2' => 'nullable|numeric',
+        'size3' => 'nullable|numeric',
+        'size4' => 'nullable|numeric',
+        'size5' => 'nullable|numeric',
+        'size6' => 'nullable|numeric',
+        'size7' => 'nullable|numeric',
+        'size8' => 'nullable|numeric',
+        'size9' => 'nullable|numeric',
+        'size10' => 'nullable|numeric',
+        'size11' => 'nullable|numeric',
+        'size12' => 'nullable|numeric'
       ]);
+
+      if($DEBUG)
+        echo "\r\nPassed Validation\r\n";
 
       $imageName = $request->photo->getClientOriginalName();
 
+      // save the original image
       $image = $request->photo->storeAs('public/images', $imageName);
 
+      // create the directory if it doesn't exist
+      if(!file_exists('images/Resized'))
+      {
+        mkdir($directory, 0775, true);
+      }
+
       $mime=$request->photo->extension();
+
+      if($DEBUG)
+        echo "mime = ".$mime;
 
       switch($mime)
       {
         case "jpg":
+          if($DEBUG)
+            echo "Cliff here in jpg";
+          $start_name = str_replace('.jpg', '', basename($image));
           $im_php = imagecreatefromjpeg($request->photo);
           break;
         case "jpeg":
+          if($DEBUG)
+            echo "Cliff here in jpeg";
           $im_php = imagecreatefromjpeg($request->photo);
+          $start_name = str_replace('.jpeg', '', basename($image));
+          $start_name = str_replace('.jpg' , '', basename($image));
           break;
         case "png":
+          $start_name = str_replace('.png', '', basename($image));
           $im_php = imagecreatefrompng($request->photo);
           break;
         case "gif":
+          $start_name = str_replace('.gif', '', basename($image));
           $im_php = imagecreatefromgif($request->photo);
           break;
         default:
-          return "Please attach a valid image";
+          return view('welcome', [
+            'error' => 'Please attach a jpg, png, or gif image'
+          ]);
       }
-      // now lets write each scale
+
+      // now lets create an image for each scale
       foreach($scales as $scale)
       {
         $im_php = imagescale($im_php, $scale);
         $new_height = imagesy($im_php);
-        $new_name = str_replace('.jpg', '', basename($image));
-        $new_name = str_replace('.jpeg', '', basename($image));
-        $new_name = $new_name.'_X'.$scale.'_Y'.$new_height.'.jpg';
+        $new_name = $start_name.'_X'.$scale.'_Y'.$new_height.'.jpg';
+
+        if($DEBUG)
+        echo "\r\n".$new_name."\r\n";
+
+        $file_path = $directory . '/' . $new_name;
+
         // create the new image with 90% quality
         switch($mime)
         {
           case "jpg":
-            imagejpeg($im_php, 'images/Resized/' . $new_name, 90);
+            imagejpeg($im_php, $file_path, 90);
             break;
           case "jpeg":
-            imagejpeg($im_php, 'images/Resized/' . $new_name, 90);
-          break;
+            imagejpeg($im_php, $file_path, 90);
+            break;
           case "png":
-            imagepng($im_php, 'images/Resized/' . $new_name, 90);
+            imagepng($im_php, $file_path, 90);
             break;
           case "gif":
-            imagegif($im_php, 'images/Resized/' . $new_name, 90);
+            imagegif($im_php, $file_path, 90);
             break;
           default:
-            return "Please attach a valid image";
+          return view('welcome', [
+            'error' => 'Please attach a jpg, png, or gif image'
+          ]);
         }
-          echo"File saved - ".$new_name;
+        $imageArray[] = $file_path;
       }
+      return back()->with('imageArray', $imageArray);
     }
     else
     {
-      return "Please add an image";
+      return view('welcome', ['error' => 'Please add an image']);
     }
-    dd("Cliff here at end");
   }
 }
