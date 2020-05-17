@@ -1,7 +1,7 @@
 # Welcome to the image-resizer!
 
 ![Screen Shot 1](../assets/Screen-Shot-1.png?raw=true)
-Up to 12 different image sizes
+Up to 12 different image sizes, Responsive Image Generation on the fly!
 
 ![Screen Shot 2](../assets/Screen-Shot-2.png?raw=true)
 All of the fields on step 2 are optional, they will be removed from the code if you leave them blank.
