@@ -30,4 +30,13 @@ public/js/form.js
 
 ##### WARNING:  DO NOT PUT THIS CODE ON A WEBSITE OR A HACKER WILL PAWN YOU WITH A RAT!  THIS APPLICATION IS FOR USE ON YOUR LOCAL DEV SERVER ONLY!  DON'T EVER STORE USER UPLOADED FILES ON YOUR SERVER EVER, DONT DO IT!! USE THE CLOUD OR A SERVICE FROM SOMEWHERE. ALWAYS CHANGE UPLOADED FILENAMES TO SOMETHING COMPLETELY RANDOM AND NEVER TRUST FILE EXTENSIONS.  SEARCH FOR OWASP TO LEARN MORE.
 
+Installation: 
+1.  Clone the repository
+2.  composer install
+3.  rename .env.example to .env
+4.  php aritsan key:generate
+5.  php artisan serve
+6.  open browser to localhost:8000
+
+
 Troubleshooting:  This application uses the gd library for image manipulation so make sure it is enabled with phpinfo()
