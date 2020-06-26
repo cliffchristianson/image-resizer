@@ -54,7 +54,6 @@ class ResponsiveImageController extends Controller
     else {
         return view('welcome', ['error' => 'The php gd library is NOT installed in your php, you can try phpinfo(); to see more.  You may have to install a new version of php or recompile php with gd enabled.']);
     }
-
     // Although we could use dynamic variable names here,
     // I don't think it would be cool, so let's not do that
     if($request->size1)
@@ -87,6 +86,9 @@ class ResponsiveImageController extends Controller
 
     if($request->hasFile('photo'))
     {
+      if($DEBUG)
+        echo "\r\nBefore Validation";
+
       request()->validate([
         'photo' => 'required|image|mimes:jpeg,png,jpg,gif',
         'size1' => 'required|numeric',
@@ -112,7 +114,7 @@ class ResponsiveImageController extends Controller
       $image = $request->photo->storeAs('public/images', $imageName);
 
       // create the directory if it doesn't exist
-      if(!file_exists('images/Resized'))
+      if(!file_exists('images/resized'))
       {
         mkdir($directory, 0775, true);
       }

@@ -49,7 +49,6 @@ const submitForm = () =>
   localStorage.setItem(formIdentifier, JSON.stringify(data[formIdentifier]));
   document.getElementById("resize-image-form").submit();
 };
-
 /**
  * this is the submit button from step 2
  * save all guys to local storage
@@ -114,6 +113,19 @@ const buildFigure = () =>
   createEndAnchorElement('cite-link', 'cite-link-end-span');
   
 };
+/**
+ * This is the restart button from step 3
+ * show step 1 and hide step 2 and step 3
+ */
+const resetForm = () =>
+{
+  document.getElementById("step1").style.display = "block";
+  document.getElementById("step2").style.display = "none";
+  document.getElementById("step3").style.display = "none";
+
+  // lets reset the file upload field
+  document.getElementById("photo").value = "";
+}
 
 // create an anchor element with the input link
 const createAnchorElement = (elem, elemSpan) =>

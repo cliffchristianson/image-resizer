@@ -108,7 +108,7 @@
           <div class="form-row">
             <div class="form-group">
               <button class="btn btn-primary"
-                  href="javascript: submitForm()">
+                  onclick="submitForm();">
               Submit
               </button>
             </div>
@@ -243,7 +243,7 @@
   &lt;picture&gt;
 @if(session()->has('imageArray'))
 @foreach(Session::get('imageArray') as $cnt => $image)
-    &lt;source media="(min-width: <span id="min-width-{{ $cnt + 1 }}"></span>)" srcset="<span id='image-srcset-{{ $cnt + 1 }}'></span>"&gt;
+    &lt;source media="(min-width: <span id="min-width-{{ $cnt + 1 }}"></span>px)" srcset="<span id='image-srcset-{{ $cnt + 1 }}'></span>"&gt;
 @endforeach
     <span id="image-src"></span>
 @endif
@@ -260,6 +260,17 @@
 &lt;/figure&gt;
             </code>
           </pre>
+          <div class="form-row">
+            <div class="form-group">
+              <button
+                type="button"
+                class="btn btn-primary"
+                onclick="resetForm()">
+              Start Again!
+              </button>
+            </div>
+          </div>
+
         </div>
       </div>
     </div>
