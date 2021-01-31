@@ -54,7 +54,7 @@
 </head>
 <body>
   <form
-  method="post"
+  method="POST"
   id="resize-image-form"
   action="{{url('createImages')}}"
   enctype="multipart/form-data">

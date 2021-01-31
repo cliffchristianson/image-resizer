@@ -45,13 +45,16 @@ class ResponsiveImageController extends Controller
   {
     $directory = 'images/resized'; // This path is in my public, NOT my storage/app
     $imageArray = []; // return array of images we create
-    $DEBUG = 0; // Set to 1 for testing
-
+    $DEBUG = 1; // Set to 1 for testing
+    
+    
     if (extension_loaded('gd') && function_exists('gd_info')) {
       if($DEBUG)
-        echo "PHP GD Library is install in php";
+          echo "PHP GD Library is install in php";
     }
     else {
+        echo "No PHP GD Library";
+        die();
         return view('welcome', ['error' => 'The php gd library is NOT installed in your php, you can try phpinfo(); to see more.  You may have to install a new version of php or recompile php with gd enabled.']);
     }
     // Although we could use dynamic variable names here,

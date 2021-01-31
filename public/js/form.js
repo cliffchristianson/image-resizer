@@ -46,6 +46,7 @@ let formElements = form.elements; // get the elements in the form
 const submitForm = () =>
 {
   data = getFormData();
+  // console.table(data);
   localStorage.setItem(formIdentifier, JSON.stringify(data[formIdentifier]));
   document.getElementById("resize-image-form").submit();
 };
